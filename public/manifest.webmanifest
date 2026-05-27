@@ -1,0 +1,17 @@
+{
+  "name": "今天请吃什么",
+  "short_name": "今天吃什么",
+  "description": "共享房间抽签小工具：和朋友一起维护想吃清单，抽到什么今天就请什么。",
+  "theme_color": "#f43f5e",
+  "background_color": "#fff7ed",
+  "display": "standalone",
+  "orientation": "portrait",
+  "lang": "zh-CN",
+  "start_url": "/",
+  "scope": "/",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
