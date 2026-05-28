@@ -12,14 +12,21 @@ import { DialDisplay } from "./components/DialDisplay.jsx";
 import { Members } from "./components/Members.jsx";
 import { History } from "./components/History.jsx";
 import { ConnectionBadge } from "./components/ConnectionBadge.jsx";
+import { InviteModal } from "./components/InviteModal.jsx";
 import {
-  Copy, Logout, Plus, Trash, Reset, Dice, Bolt, Check, Alert
+  Copy, Logout, Plus, Trash, Reset, Dice, Bolt, Check, Alert, QrCode
 } from "./components/Icons.jsx";
 
 const ROOM_KEY = "today-treat-picker-active-room";
 const DRAW_STYLE_KEY = "today-treat-picker-draw-style";
 
-function readRoom() { try { return localStorage.getItem(ROOM_KEY) || ""; } catch { return ""; } }
+function readRoom() {
+  try {
+    const fromUrl = new URLSearchParams(window.location.search).get("room");
+    if (fromUrl) return normalizeRoomCode(fromUrl);
+    return localStorage.getItem(ROOM_KEY) || "";
+  } catch { return ""; }
+}
 function writeRoom(v) { try { v ? localStorage.setItem(ROOM_KEY, v) : localStorage.removeItem(ROOM_KEY); } catch {} }
 function readDrawStyle() { try { return localStorage.getItem(DRAW_STYLE_KEY) || "slot"; } catch { return "slot"; } }
 function writeDrawStyle(v) { try { localStorage.setItem(DRAW_STYLE_KEY, v); } catch {} }
@@ -40,6 +47,18 @@ export default function App() {
   const [copied, setCopied] = useState(false);
   const [dialRotation, setDialRotation] = useState(0);
   const [justAdded, setJustAdded] = useState(null);
+  const [showInvite, setShowInvite] = useState(false);
+
+  // 读完 ?room= 后把它从地址栏抹掉，房间状态后续由 React state / localStorage 接管
+  useEffect(() => {
+    try {
+      const url = new URL(window.location.href);
+      if (url.searchParams.has("room")) {
+        url.searchParams.delete("room");
+        window.history.replaceState({}, "", url.pathname + url.search + url.hash);
+      }
+    } catch {}
+  }, []);
 
   const { options, history, error, addOption, removeOption, resetLibrary, recordDraw } = useRoom(roomCode);
   const peers = usePresence(roomCode, me);
@@ -186,6 +205,11 @@ export default function App() {
                       style={{ color: copied ? theme.accent : "inherit" }}>
                 {copied ? <Check size={16} /> : <Copy size={16} />}
               </button>
+              <button onClick={() => setShowInvite(true)}
+                      className="rounded-xl p-2 transition hover:bg-black/5"
+                      aria-label="显示房间二维码">
+                <QrCode size={16} />
+              </button>
               <button onClick={leaveRoom}
                       className="rounded-xl p-2 transition hover:bg-black/5"
                       aria-label="退出房间">
@@ -314,7 +338,7 @@ export default function App() {
               memberList={memberList}
               me={me}
               onRename={renameMe}
-              onInvite={copyCode}
+              onInvite={() => setShowInvite(true)}
               theme={theme}
               dens={dens}
             />
@@ -402,6 +426,10 @@ export default function App() {
           <p className="font-mono-dm">v1.0 · today-treat-picker</p>
         </footer>
       </div>
+
+      {showInvite && (
+        <InviteModal roomCode={roomCode} theme={theme} onClose={() => setShowInvite(false)} />
+      )}
     </main>
   );
 }

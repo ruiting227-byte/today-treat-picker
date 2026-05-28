@@ -70,7 +70,7 @@ export function Members({ memberList, me, onRename, onInvite, theme, dens }) {
       {memberList.length === 1 && (
         <p className="mt-3 text-[11px] leading-5"
            style={{ color: theme.dark ? "rgba(248,250,252,.45)" : "rgba(15,23,42,.45)" }}>
-          目前只有你一个。复制房间码发给朋友，对方进入后会出现在这里。
+          目前只有你一个。点「邀请」出示二维码 / 发链接给朋友，对方进来就会出现在这里。
         </p>
       )}
     </div>
