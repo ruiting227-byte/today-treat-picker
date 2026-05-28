@@ -56,5 +56,20 @@ create policy "anon can read draw results" on draw_results for select to anon us
 create policy "anon can insert draw results" on draw_results for insert to anon with check (true);
 
 -- 实时订阅（让前端能听到别人对清单 / 抽签 / 在线状态的变更）
-alter publication supabase_realtime add table treat_options;
-alter publication supabase_realtime add table draw_results;
+-- 用 DO 块做幂等保护：已加进 publication 的表不重复添加，整份脚本可安全重跑。
+do $$
+begin
+  if not exists (
+    select 1 from pg_publication_tables
+    where pubname = 'supabase_realtime' and schemaname = 'public' and tablename = 'treat_options'
+  ) then
+    alter publication supabase_realtime add table treat_options;
+  end if;
+
+  if not exists (
+    select 1 from pg_publication_tables
+    where pubname = 'supabase_realtime' and schemaname = 'public' and tablename = 'draw_results'
+  ) then
+    alter publication supabase_realtime add table draw_results;
+  end if;
+end $$;

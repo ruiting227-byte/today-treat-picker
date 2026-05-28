@@ -129,7 +129,7 @@ export function RoomGate({ onJoin, theme, themeId, onThemeChange }) {
 
             <p className="mt-6 text-xs leading-5"
                style={{ color: theme.dark ? "rgba(248,250,252,.4)" : "rgba(15,23,42,.4)" }}>
-              提示：房间码即口令，知道码的人都可进入。<br />建议在熟人小团体内共享。
+              提示：房间码即口令，知道码的人都可进入。<br />码就是钥匙 —— 发给想一起开饭的人就好，可别手滑甩进 500 人大群 🤭
             </p>
 
             {/* Personal skin picker */}
