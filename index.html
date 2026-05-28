@@ -39,10 +39,21 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=Inter:wght@400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <!-- 字体异步加载：网络慢/被墙时不阻塞渲染，先用系统字体（苹方等），加载好再无缝替换 -->
+    <link rel="stylesheet" media="print" onload="this.media='all'"
+          href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=Inter:wght@400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" />
+    <noscript><link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=Inter:wght@400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" /></noscript>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;font-family:system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;background:#fff7ed;color:#f43f5e;">
+        <div style="text-align:center;">
+          <div style="font-size:42px;line-height:1;">🥟</div>
+          <div style="margin-top:12px;font-weight:700;font-size:15px;">今天请吃什么…</div>
+        </div>
+      </div>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
